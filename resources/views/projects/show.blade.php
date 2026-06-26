@@ -86,11 +86,16 @@
 
         <div class="overflow-hidden rounded-xl border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">
             @forelse ($project->exports as $export)
-                <div class="border-b border-zinc-200 p-4 last:border-b-0 dark:border-zinc-700">
-                    <div class="font-medium text-zinc-900 dark:text-white">{{ $export->name }}</div>
-                    <div class="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-                        {{ $export->status }} · {{ $export->items->count() }} artifacts
+                <div class="flex items-center justify-between gap-4 border-b border-zinc-200 p-4 last:border-b-0 dark:border-zinc-700">
+                    <div>
+                        <div class="font-medium text-zinc-900 dark:text-white">{{ $export->name }}</div>
+                        <div class="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+                            {{ $export->status }} · {{ $export->items->count() }} artifacts
+                        </div>
                     </div>
+                    @if ($export->status === 'completed')
+                        <flux:button :href="route('exports.download', [$team, $project, $export])" variant="ghost">Download ZIP</flux:button>
+                    @endif
                 </div>
             @empty
                 <div class="p-6 text-sm text-zinc-600 dark:text-zinc-400">No exports requested yet.</div>

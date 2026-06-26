@@ -32,6 +32,8 @@ class ArtifactFactory extends Factory
             'size_bytes' => fake()->numberBetween(100, 10000),
             'checksum' => null,
             'processing_status' => 'queued',
+            'review_status' => 'pending',
+            'reviewed_at' => null,
             'preview_metadata' => null,
         ];
     }

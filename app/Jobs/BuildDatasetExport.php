@@ -69,7 +69,7 @@ class BuildDatasetExport implements ShouldQueue
             throw new RuntimeException('Unable to allocate a temporary export file.');
         }
 
-        $zip = new ZipArchive();
+        $zip = new ZipArchive;
 
         if ($zip->open($tempZip, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
             throw new RuntimeException('Unable to create dataset export archive.');

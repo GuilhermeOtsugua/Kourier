@@ -8,7 +8,6 @@ use App\Models\AuditEvent;
 use App\Models\Project;
 use App\Models\Team;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ArtifactController extends Controller

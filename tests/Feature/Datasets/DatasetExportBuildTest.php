@@ -78,7 +78,7 @@ it('builds a zip package and manifest for a dataset export', function () {
         ->toContain('one.csv')
         ->toContain('two.csv');
 
-    $zip = new ZipArchive();
+    $zip = new ZipArchive;
     $zip->open(Storage::disk('local')->path($export->path));
 
     expect($zip->locateName('manifest.csv'))->toBeInt()

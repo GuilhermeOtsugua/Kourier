@@ -303,7 +303,11 @@ Run a queue worker when testing async preview/export processing manually:
 php artisan queue:work --tries=3
 ```
 
-## Testing and quality gates
+## Tests
+
+Koúrier is built around feature tests for the secure dataset workflow. The tests
+use local/fake storage and SQLite-friendly database refreshes, so they do not
+require real S3/R2/MinIO credentials.
 
 Run the full backend quality gate:
 
@@ -314,12 +318,30 @@ composer run test
 That clears config and runs:
 
 ```text
-pint --parallel --test
-phpstan analyse --memory-limit=512M
-php artisan test
+pint --parallel --test              # style check only; does not rewrite files
+phpstan analyse --memory-limit=512M # static analysis via Larastan
+php artisan test                    # Pest feature/unit suite
 ```
 
-Run the frontend production build:
+Focused test commands:
+
+```bash
+php artisan test tests/Feature/LandingPageTest.php                         # public landing page + demo CTA
+php artisan test tests/Feature/DemoDatasetSeederTest.php                   # seeded demo user/team/files/export
+php artisan test tests/Feature/Datasets/ProjectManagementTest.php          # team-scoped project creation/listing
+php artisan test tests/Feature/Datasets/ArtifactUploadTest.php             # private artifact upload workflow
+php artisan test tests/Feature/Datasets/ArtifactDownloadTest.php           # authorized temporary artifact downloads
+php artisan test tests/Feature/Datasets/ArtifactPreviewTest.php            # lightweight preview metadata job
+php artisan test tests/Feature/Datasets/ArtifactLabelTest.php              # labels + review status updates
+php artisan test tests/Feature/Datasets/DatasetExportRequestTest.php       # export request selection rules
+php artisan test tests/Feature/Datasets/DatasetExportBuildTest.php         # ZIP package + manifest generation
+php artisan test tests/Feature/Datasets/DatasetExportDownloadTest.php      # authorized temporary export downloads
+php artisan test tests/Feature/Datasets/AuditEventTest.php                 # dataset audit trail events
+php artisan test tests/Feature/Teams                                       # team membership/invitation behavior
+php artisan test tests/Feature/Auth tests/Feature/Settings                 # starter-kit auth and account flows
+```
+
+Run the frontend production build separately:
 
 ```bash
 npm run build

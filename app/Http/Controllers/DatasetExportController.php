@@ -21,7 +21,10 @@ class DatasetExportController extends Controller
         abort_unless($project->team_id === $current_team->id, 404);
 
         $validated = $request->validated();
-        $artifactIds = collect($validated['artifact_ids'])->unique()->values();
+        $artifactIds = $request->collect('artifact_ids')
+            ->map(fn (mixed $artifactId): int => (int) $artifactId)
+            ->unique()
+            ->values();
 
         $export = DB::transaction(function () use ($project, $request, $validated, $artifactIds) {
             $export = $project->exports()->create([

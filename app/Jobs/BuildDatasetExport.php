@@ -93,9 +93,15 @@ class BuildDatasetExport implements ShouldQueue
 
         $zip->close();
 
+        $zipContents = file_get_contents($tempZip);
+
+        if ($zipContents === false) {
+            throw new RuntimeException('Unable to read the completed dataset export archive.');
+        }
+
         $targetDisk = Storage::disk($diskName);
         $targetDisk->put($manifestPath, $manifest);
-        $targetDisk->put($zipPath, file_get_contents($tempZip));
+        $targetDisk->put($zipPath, $zipContents);
 
         @unlink($tempZip);
 

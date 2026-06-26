@@ -31,13 +31,14 @@ class StoreDatasetExportRequest extends FormRequest
     public function rules(): array
     {
         $project = $this->route('project');
+        $projectId = $project instanceof Project ? $project->id : null;
 
         return [
             'name' => ['required', 'string', 'max:255'],
             'artifact_ids' => ['required', 'array', 'min:1'],
             'artifact_ids.*' => [
                 'integer',
-                Rule::exists('artifacts', 'id')->where('project_id', $project?->id),
+                Rule::exists('artifacts', 'id')->where('project_id', $projectId),
             ],
         ];
     }

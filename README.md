@@ -358,6 +358,14 @@ These are intentionally out of scope for the lean MVP:
 - billing,
 - production autoscaling / ECS / CloudTrail / KMS-heavy architecture.
 
+## License
+
+Koúrier is licensed under the GNU Affero General Public License v3.0 only (`AGPL-3.0-only`). See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+
+Commercial/proprietary licenses may be available separately. If you want to use Koúrier or derivative work in a closed-source product, hosted service, bundled offering, or other proprietary context, see [COMMERCIAL.md](COMMERCIAL.md).
+
+By contributing to this repository, you agree that your contributions are licensed under `AGPL-3.0-only` and may also be used by the project maintainer under separate commercial license terms. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Repository status
 
 This repository was built with a vertical TDD workflow: one failing behavior test,

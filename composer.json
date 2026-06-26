@@ -1,11 +1,12 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/livewire-starter-kit",
+    "name": "kumomi/kourier",
     "type": "project",
-    "description": "The official Laravel starter kit for Livewire.",
+    "description": "Secure dataset tooling MVP for Laravel.",
     "keywords": [
+        "dataset",
         "laravel",
-        "framework"
+        "secure-storage"
     ],
     "license": "MIT",
     "require": {

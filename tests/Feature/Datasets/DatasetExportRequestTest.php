@@ -1,14 +1,18 @@
 <?php
 
+use App\Jobs\BuildDatasetExport;
 use App\Models\Artifact;
 use App\Models\DatasetExport;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Queue;
 
 uses(RefreshDatabase::class);
 
 it('lets an authorized project member request an export for selected artifacts', function () {
+    Queue::fake();
+
     $user = User::factory()->create();
     $team = $user->currentTeam;
     $project = Project::factory()
@@ -41,4 +45,6 @@ it('lets an authorized project member request an export for selected artifacts',
 
     expect($export->items()->pluck('artifact_id')->all())
         ->toEqualCanonicalizing($artifacts->pluck('id')->all());
+
+    Queue::assertPushed(BuildDatasetExport::class);
 });

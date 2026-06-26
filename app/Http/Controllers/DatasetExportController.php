@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\BuildDatasetExport;
 use App\Http\Requests\StoreDatasetExportRequest;
 use App\Models\Artifact;
 use App\Models\Project;
@@ -21,7 +22,7 @@ class DatasetExportController extends Controller
         $validated = $request->validated();
         $artifactIds = collect($validated['artifact_ids'])->unique()->values();
 
-        DB::transaction(function () use ($project, $request, $validated, $artifactIds): void {
+        $export = DB::transaction(function () use ($project, $request, $validated, $artifactIds) {
             $export = $project->exports()->create([
                 'requested_by_id' => $request->user()->id,
                 'name' => $validated['name'],
@@ -37,7 +38,11 @@ class DatasetExportController extends Controller
                     'artifact_id' => $artifact->id,
                     'original_filename' => $artifact->original_filename,
                 ]));
+
+            return $export;
         });
+
+        BuildDatasetExport::dispatch($export);
 
         return redirect()->route('projects.show', [$current_team, $project]);
     }

@@ -1,16 +1,19 @@
 <?php
 
+use App\Jobs\ProcessArtifactPreview;
 use App\Models\Artifact;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 
 uses(RefreshDatabase::class);
 
 it('stores uploaded artifacts privately for an authorized project member', function () {
     Storage::fake('local');
+    Queue::fake();
 
     $user = User::factory()->create();
     $team = $user->currentTeam;
@@ -41,4 +44,5 @@ it('stores uploaded artifacts privately for an authorized project member', funct
         ->processing_status->toBe('queued');
 
     Storage::disk('local')->assertExists($artifact->path);
+    Queue::assertPushed(ProcessArtifactPreview::class);
 });

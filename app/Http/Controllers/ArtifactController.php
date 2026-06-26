@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ProcessArtifactPreview;
 use App\Http\Requests\StoreArtifactRequest;
 use App\Models\Project;
 use App\Models\Team;
@@ -24,7 +25,7 @@ class ArtifactController extends Controller
         $filename = Str::uuid()->toString().'.'.$file->getClientOriginalExtension();
         $path = $file->storeAs($directory, $filename, $disk);
 
-        $project->artifacts()->create([
+        $artifact = $project->artifacts()->create([
             'uploaded_by_id' => $request->user()->id,
             'disk' => $disk,
             'path' => $path,
@@ -34,6 +35,8 @@ class ArtifactController extends Controller
             'checksum' => hash_file('sha256', $file->getRealPath()),
             'processing_status' => 'queued',
         ]);
+
+        ProcessArtifactPreview::dispatch($artifact);
 
         return redirect()->route('projects.show', [$current_team, $project]);
     }

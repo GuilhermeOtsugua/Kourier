@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArtifactController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Middleware\EnsureTeamMembership;
 use Illuminate\Support\Facades\Route;
@@ -10,6 +11,7 @@ Route::prefix('{current_team}')
     ->middleware(['auth', 'verified', EnsureTeamMembership::class])
     ->group(function () {
         Route::view('dashboard', 'dashboard')->name('dashboard');
+        Route::post('projects/{project}/artifacts', [ArtifactController::class, 'store'])->name('artifacts.store');
         Route::resource('projects', ProjectController::class)->only(['index', 'create', 'store', 'show']);
     });
 

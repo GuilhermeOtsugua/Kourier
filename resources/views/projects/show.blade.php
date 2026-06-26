@@ -8,8 +8,28 @@
             @endif
         </div>
 
-        <div class="rounded-xl border border-dashed border-zinc-300 p-6 text-sm text-zinc-600 dark:border-zinc-700 dark:text-zinc-400">
-            Artifact intake will appear here.
+        <form class="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900" method="POST" action="{{ route('artifacts.store', [$team, $project]) }}" enctype="multipart/form-data">
+            @csrf
+
+            <div class="flex flex-col gap-4 md:flex-row md:items-end">
+                <div class="flex-1">
+                    <flux:input type="file" name="artifact" :label="__('Upload private artifact')" required />
+                </div>
+                <flux:button type="submit" variant="primary">Upload artifact</flux:button>
+            </div>
+        </form>
+
+        <div class="overflow-hidden rounded-xl border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">
+            @forelse ($project->artifacts as $artifact)
+                <div class="border-b border-zinc-200 p-4 last:border-b-0 dark:border-zinc-700">
+                    <div class="font-medium text-zinc-900 dark:text-white">{{ $artifact->original_filename }}</div>
+                    <div class="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+                        {{ $artifact->processing_status }} · {{ number_format($artifact->size_bytes) }} bytes
+                    </div>
+                </div>
+            @empty
+                <div class="p-6 text-sm text-zinc-600 dark:text-zinc-400">No artifacts uploaded yet.</div>
+            @endforelse
         </div>
     </div>
 </x-layouts::app>

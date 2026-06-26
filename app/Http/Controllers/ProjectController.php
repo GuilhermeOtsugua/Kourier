@@ -58,7 +58,7 @@ class ProjectController extends Controller
 
         return view('projects.show', [
             'team' => $current_team,
-            'project' => $project,
+            'project' => $project->load(['artifacts' => fn ($query) => $query->latest()]),
         ]);
     }
 }

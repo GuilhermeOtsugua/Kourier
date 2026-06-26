@@ -6,7 +6,9 @@ use Database\Factories\ProjectFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -17,6 +19,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $description
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Collection<int, Artifact> $artifacts
  * @property-read Team $team
  * @property-read User $creator
  */
@@ -44,5 +47,15 @@ class Project extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by_id');
+    }
+
+    /**
+     * Get artifacts uploaded to the project.
+     *
+     * @return HasMany<Artifact, $this>
+     */
+    public function artifacts(): HasMany
+    {
+        return $this->hasMany(Artifact::class);
     }
 }

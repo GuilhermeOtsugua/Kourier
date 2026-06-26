@@ -25,6 +25,8 @@ shape requires them.
 | ZIP package + CSV manifest export job | ✅ Implemented |
 | Authorized temporary export downloads | ✅ Implemented |
 | Security audit events for key dataset activity | ✅ Implemented |
+| Public landing page with demo CTA | ✅ Implemented |
+| Seeded local demo workspace | ✅ Implemented |
 | Local/fake storage test coverage | ✅ Implemented |
 | S3-compatible filesystem adapter | ✅ Installed |
 | Real S3/R2/MinIO runtime validation | ⏳ Requires bucket credentials |
@@ -265,6 +267,7 @@ npm install
 cp .env.example .env
 php artisan key:generate
 php artisan migrate
+php artisan db:seed --class=DemoDatasetSeeder
 npm run build
 ```
 
@@ -278,6 +281,20 @@ With Herd, the project can be opened at:
 
 ```text
 http://kourier.test
+```
+
+The demo seed creates a verified local workspace with private files, labels,
+audit events, and a completed ZIP export:
+
+```text
+Email:    otsugua@example.com
+Password: pass
+```
+
+To refresh only the demo data, run:
+
+```bash
+php artisan db:seed --class=DemoDatasetSeeder
 ```
 
 Run a queue worker when testing async preview/export processing manually:
@@ -313,7 +330,7 @@ Current local verification:
 ```text
 Pint:   passed
 PHPStan: passed
-Pest:   81 tests / 232 assertions passed
+Pest:   84 tests / 261 assertions passed
 Vite:   production build passed
 ```
 

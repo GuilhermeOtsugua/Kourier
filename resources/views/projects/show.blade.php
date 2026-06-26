@@ -21,11 +21,14 @@
 
         <div class="overflow-hidden rounded-xl border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">
             @forelse ($project->artifacts as $artifact)
-                <div class="border-b border-zinc-200 p-4 last:border-b-0 dark:border-zinc-700">
-                    <div class="font-medium text-zinc-900 dark:text-white">{{ $artifact->original_filename }}</div>
-                    <div class="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-                        {{ $artifact->processing_status }} · {{ number_format($artifact->size_bytes) }} bytes
+                <div class="flex items-center justify-between gap-4 border-b border-zinc-200 p-4 last:border-b-0 dark:border-zinc-700">
+                    <div>
+                        <div class="font-medium text-zinc-900 dark:text-white">{{ $artifact->original_filename }}</div>
+                        <div class="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+                            {{ $artifact->processing_status }} · {{ number_format($artifact->size_bytes) }} bytes
+                        </div>
                     </div>
+                    <flux:button :href="route('artifacts.download', [$team, $project, $artifact])" variant="ghost">Download</flux:button>
                 </div>
             @empty
                 <div class="p-6 text-sm text-zinc-600 dark:text-zinc-400">No artifacts uploaded yet.</div>

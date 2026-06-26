@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\Team;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 
 class ProjectController extends Controller
 {
@@ -54,7 +55,7 @@ class ProjectController extends Controller
     {
         abort_unless($project->team_id === $current_team->id, 404);
 
-        $this->authorize('view', $project);
+        Gate::authorize('view', $project);
 
         return view('projects.show', [
             'team' => $current_team,

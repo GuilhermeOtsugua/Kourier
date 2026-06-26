@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArtifactController;
+use App\Http\Controllers\ArtifactDownloadController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Middleware\EnsureTeamMembership;
 use Illuminate\Support\Facades\Route;
@@ -11,6 +12,8 @@ Route::prefix('{current_team}')
     ->middleware(['auth', 'verified', EnsureTeamMembership::class])
     ->group(function () {
         Route::view('dashboard', 'dashboard')->name('dashboard');
+        Route::get('projects/{project}/artifacts/{artifact}/download', [ArtifactDownloadController::class, 'redirect'])->name('artifacts.download');
+        Route::get('artifacts/{artifact}/signed-download', [ArtifactDownloadController::class, 'download'])->middleware('signed')->name('artifacts.download.signed');
         Route::post('projects/{project}/artifacts', [ArtifactController::class, 'store'])->name('artifacts.store');
         Route::resource('projects', ProjectController::class)->only(['index', 'create', 'store', 'show']);
     });

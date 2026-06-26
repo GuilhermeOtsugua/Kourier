@@ -19,6 +19,26 @@
             </div>
         </form>
 
+        @if ($project->artifacts->isNotEmpty())
+            <form class="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900" method="POST" action="{{ route('exports.store', [$team, $project]) }}">
+                @csrf
+
+                <div class="grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
+                    <flux:input name="name" :label="__('Export name')" placeholder="Approved training package" required />
+                    <flux:button type="submit" variant="primary">Request export</flux:button>
+                </div>
+
+                <div class="mt-4 grid gap-2 md:grid-cols-2">
+                    @foreach ($project->artifacts as $artifact)
+                        <label class="flex items-center gap-2 rounded-lg border border-zinc-200 p-3 text-sm dark:border-zinc-700" wire:key="export-artifact-{{ $artifact->id }}">
+                            <input type="checkbox" name="artifact_ids[]" value="{{ $artifact->id }}" class="rounded border-zinc-300">
+                            <span>{{ $artifact->original_filename }}</span>
+                        </label>
+                    @endforeach
+                </div>
+            </form>
+        @endif
+
         <div class="overflow-hidden rounded-xl border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">
             @forelse ($project->artifacts as $artifact)
                 <div class="border-b border-zinc-200 p-4 last:border-b-0 dark:border-zinc-700">
@@ -61,6 +81,19 @@
                 </div>
             @empty
                 <div class="p-6 text-sm text-zinc-600 dark:text-zinc-400">No artifacts uploaded yet.</div>
+            @endforelse
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">
+            @forelse ($project->exports as $export)
+                <div class="border-b border-zinc-200 p-4 last:border-b-0 dark:border-zinc-700">
+                    <div class="font-medium text-zinc-900 dark:text-white">{{ $export->name }}</div>
+                    <div class="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+                        {{ $export->status }} · {{ $export->items->count() }} artifacts
+                    </div>
+                </div>
+            @empty
+                <div class="p-6 text-sm text-zinc-600 dark:text-zinc-400">No exports requested yet.</div>
             @endforelse
         </div>
     </div>

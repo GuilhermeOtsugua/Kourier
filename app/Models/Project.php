@@ -20,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection<int, Artifact> $artifacts
+ * @property-read Collection<int, DatasetExport> $exports
  * @property-read Team $team
  * @property-read User $creator
  */
@@ -57,5 +58,15 @@ class Project extends Model
     public function artifacts(): HasMany
     {
         return $this->hasMany(Artifact::class);
+    }
+
+    /**
+     * Get export requests for the project.
+     *
+     * @return HasMany<DatasetExport, $this>
+     */
+    public function exports(): HasMany
+    {
+        return $this->hasMany(DatasetExport::class);
     }
 }

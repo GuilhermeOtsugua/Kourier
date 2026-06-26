@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\ProcessArtifactPreview;
 use App\Http\Requests\StoreArtifactRequest;
+use App\Jobs\ProcessArtifactPreview;
+use App\Models\AuditEvent;
 use App\Models\Project;
 use App\Models\Team;
 use Illuminate\Http\RedirectResponse;
@@ -34,6 +35,11 @@ class ArtifactController extends Controller
             'size_bytes' => $file->getSize(),
             'checksum' => hash_file('sha256', $file->getRealPath()),
             'processing_status' => 'queued',
+        ]);
+
+        AuditEvent::recordForRequest($request, 'artifact.uploaded', $project, $artifact, [
+            'filename' => $artifact->original_filename,
+            'size_bytes' => $artifact->size_bytes,
         ]);
 
         ProcessArtifactPreview::dispatch($artifact);

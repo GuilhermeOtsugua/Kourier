@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreArtifactLabelRequest;
 use App\Models\Artifact;
+use App\Models\AuditEvent;
 use App\Models\Project;
 use App\Models\Team;
 use Illuminate\Http\RedirectResponse;
@@ -19,7 +20,7 @@ class ArtifactLabelController extends Controller
 
         $validated = $request->validated();
 
-        $artifact->labels()->create([
+        $label = $artifact->labels()->create([
             'created_by_id' => $request->user()->id,
             'key' => $validated['key'],
             'value' => $validated['value'],
@@ -29,6 +30,13 @@ class ArtifactLabelController extends Controller
         $artifact->update([
             'review_status' => $validated['review_status'],
             'reviewed_at' => $validated['review_status'] === 'pending' ? null : now(),
+        ]);
+
+        AuditEvent::recordForRequest($request, 'artifact.labeled', $project, $artifact, [
+            'label_id' => $label->id,
+            'key' => $label->key,
+            'value' => $label->value,
+            'review_status' => $validated['review_status'],
         ]);
 
         return redirect()->route('projects.show', [$current_team, $project]);

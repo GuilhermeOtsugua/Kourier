@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\BuildDatasetExport;
 use App\Http\Requests\StoreDatasetExportRequest;
 use App\Models\Artifact;
+use App\Models\AuditEvent;
 use App\Models\Project;
 use App\Models\Team;
 use Illuminate\Http\RedirectResponse;
@@ -41,6 +42,11 @@ class DatasetExportController extends Controller
 
             return $export;
         });
+
+        AuditEvent::recordForRequest($request, 'export.requested', $project, $export, [
+            'name' => $export->name,
+            'artifact_count' => $export->items()->count(),
+        ]);
 
         BuildDatasetExport::dispatch($export);
 

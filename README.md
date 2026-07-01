@@ -14,22 +14,14 @@ shape requires them.
 
 | Capability | Status |
 |---|---|
-| Laravel 13 app with Livewire starter kit | ✅ Implemented |
-| Team-scoped authentication / membership access | ✅ Implemented |
+| Laravel 13 secure dataset workspace | ✅ Implemented |
+| Team-scoped authentication and authorization | ✅ Implemented |
 | Dataset project creation and listing | ✅ Implemented |
-| Private artifact upload through Laravel | ✅ Implemented |
+| Private artifact upload, preview metadata, and review labels | ✅ Implemented |
 | Authorized temporary artifact downloads | ✅ Implemented |
-| Lightweight artifact preview metadata job | ✅ Implemented |
-| Artifact labels and review status | ✅ Implemented |
-| Dataset export request from selected artifacts | ✅ Implemented |
-| ZIP package + CSV manifest export job | ✅ Implemented |
-| Authorized temporary export downloads | ✅ Implemented |
-| Security audit events for key dataset activity | ✅ Implemented |
-| Public landing page with demo CTA | ✅ Implemented |
-| Seeded local demo workspace | ✅ Implemented |
-| Local/fake storage test coverage | ✅ Implemented |
-| S3-compatible filesystem adapter | ✅ Installed |
-| Real S3/R2/MinIO runtime validation | ⏳ Requires bucket credentials |
+| ZIP export packages with CSV manifests | ✅ Implemented |
+| Audit events for dataset activity | ✅ Implemented |
+| Public landing page and seeded local demo workspace | ✅ Implemented |
 
 ## Secure dataset workflow
 
@@ -152,7 +144,9 @@ Important relationships:
 
 Koúrier stores dataset artifacts and export packages through Laravel disks. The
 local default uses the private local disk; production can use any S3-compatible
-disk supported by Laravel's Flysystem adapter.
+disk supported by Laravel's Flysystem adapter. The S3-compatible filesystem
+adapter is installed, but real S3/R2/MinIO runtime validation requires private
+bucket credentials and is not part of the local test suite.
 
 Local/default:
 
